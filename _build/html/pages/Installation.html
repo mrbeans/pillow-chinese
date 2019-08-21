@@ -37,7 +37,7 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
     <link rel="next" title="使用手册" href="Handbook.html" />
-    <link rel="prev" title="Pillow(https://pillow.readthedocs.io/en/latest/index.html)" href="../index.html" /> 
+    <link rel="prev" title="Pillow" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,7 +84,7 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">安装</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">警告</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">注意事项</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">说明</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id4">基本安装</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#windows">Windows安装</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#macos">macOS安装</a></li>
@@ -184,14 +184,146 @@
 <h1>安装<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <div class="section" id="id2">
 <h2>警告<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<blockquote>
+<div><p>Pillow 和 PIL 在同一个环境下不可共存，安装 Pillow 之前请先卸载 PIL；</p>
+</div></blockquote>
+<blockquote>
+<div><p>Pillow 1.0（包含） 版本之后不再支持通过“import Image”的方式进行引用，请使用“from PIL import Image”作为替代；</p>
+</div></blockquote>
+<blockquote>
+<div><p>Pillow 2.1.0（包含） 版本之后不再支持“import _imaging”，请使用“from PIL.Image import core as _imaging”替代。</p>
+</div></blockquote>
 </div>
 <div class="section" id="id3">
-<h2>注意事项<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
-</div>
+<h2>说明<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<blockquote>
+<div><p>Pillow对不同Python版本的支持度</p>
+</div></blockquote>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>Python</th>
+<th align="center">2.4</th>
+<th align="center">2.5</th>
+<th align="center">2.6</th>
+<th align="center">2.7</th>
+<th align="center">3.2</th>
+<th align="center">3.3</th>
+<th align="center">3.4</th>
+<th align="center">3.5</th>
+<th>3.6</th>
+<th>3.7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pillow &lt; 2.0.0</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Pillow 2.x - 3.x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Pillow 4.x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Pillow 5.0.x - 5.1.x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>Pillow 5.2.x - 5.4.x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Pillow 6.x</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Pillow &gt;= 7.0.0</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table></div>
 <div class="section" id="id4">
 <h2>基本安装<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<blockquote>
+<div><p>下面的步骤介绍的Pillow安装方式，只可以处理最常用的图片格式，如果需要查看完整的支持列表，请查看“<a class="reference external" href="https://pillow.readthedocs.io/en/latest/installation.html#external-libraries">扩展类库</a>”</p>
+</div></blockquote>
+<p>使用pip安装Pillow</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Pillow</span>
+</pre></div>
+</div>
 <div class="section" id="windows">
 <h3>Windows安装<a class="headerlink" href="#windows" title="永久链接至标题">¶</a></h3>
+<p>我们提供了兼容Windows 32位和64位的.whl、.egg和.exe格式的安装包，如果需要使用Raqm功能，则需要额外安装libraqm,fribidi,和harfbuzz</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">Pillow</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="macos">
 <h3>macOS安装<a class="headerlink" href="#macos" title="永久链接至标题">¶</a></h3>
@@ -252,7 +384,7 @@
         <a href="Handbook.html" class="btn btn-neutral float-right" title="使用手册" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral float-left" title="Pillow(https://pillow.readthedocs.io/en/latest/index.html)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Pillow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
