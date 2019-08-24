@@ -1,5 +1,6 @@
 Pillow
---------------------------------------------------------
+^^^^^^
+
 Pillow是由Alex Clark和其他维护者基于PIL建立的一个分支，而PIL是由Fredrik Lundh和其他维护者建立的Python图片处理库（Python Image Library）
 
 Pillow-Chinese是Pillow文档的中文版，旨在服务广大以中文为母语的小伙伴，帮助大家更好的学习和使用这一强大类库
