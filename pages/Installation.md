@@ -110,13 +110,45 @@ Pillow的很多功能都需要额外的依赖包：
     * Libimagequant基于的GPLv3协议比Pillow的**协议多了更多限制，因此我们无法提供libimagequant的二进制文件
     * Windows支持：Libimagequant需要使用VS2015/MSVC 19编译，所以在Windows下的Python 2.7版本不支持Libimagequant
 * <b>libraqm</b> 提供了复杂文本布局的支持
-    * b
-    * b
-    * b
-    * b
-    * b
+    * libraqm提供了双向文本支持(通过使用FriBiDi),形状处理(使用HarfBuzz)，以及合适的项目化脚本，总之，Raqm支持Unocode编码下的大多数写作系统
+    * libraqm依赖于以下类库：FreeType，HarfBuzz，FriBiDi，在安装libraqm之前应该确保你已经安装了上述依赖包
+    * 如果没有安装libraqm将不能设置文本的字体和方向。
+    * 如果你已经安装了libraqm和他的所有依赖项，Pillow 5.0.0以后的版本在你需要的时候会自动加载libraqm
+    * Windows支持性：目前Raqm还不支持Windows平台
+
+如果你已经安装了以上依赖项，执行：
+
+```Python
+$ pip install Pillow
+```
+
+如果依赖项已经安装到了你机器上的标准库目录下（比如：`/usr`或者是`/usr/local`），就不需要再进行额外的配置。如果依赖项被自定义安装到了非标准位置，那么你需要在`setup.py`或`setup.cfg`文件中配置安装工具以支持这些位置，或者是通过命令行工具将他们添加到环境变量中：
+
+```Python
+$ CFLAGS="-I/usr/pkg/include" pip install pillow
+```
+
+如果Pillow已经在没有依赖项的情况下编译通过，那么你必须手动清除pip缓存或者是通过使用`--no-cache-dir`选项使用新安装的外部依赖强制构建无缓存的编译。
 
 ### 编译选项
+
+* 环境变量：`MAX_CONCURRENCY=n`.Pillow可以使用多线程编译扩展，配置项`MAX_CONCURRENCY`用于设置使用多少CPU核心进行编译，将值设置为1则禁用并行编译。`MAX_CONCURRENCY`的默认值是4，如果CPU没有4核，则会使用所有的核心。
+* 编译选项：`--disable-zlib`，`--disable-jpeg`，`--disable-tiff`，`--disable-freetype`，`--disable-lcms`，`--disable-webp`，`--disable-webpmux`，`--disable-jpeg2000`，`--disable-imagequant`。以上参数可以跳过编译相应的功能模块，即使开发库在当前机器上已经存在
+* 编译选项：`--enable-zlib`，`--enable-jpeg`，`--enable-tiff`，`--enable-freetype`，`--enable-lcms`，`--enable-webp`，`--enable-webpmux`，`--enable-jpeg2000`，`--enable-imagequant`。要求需要编译相关的功能模块，如果这些类库在当前机器上不存在则会抛出错误，Webpmux（WebP metadata）依赖于WebP支持。Tcl和TK同样必须同时使用。
+* 编译选项`--disable-platform-guessing`。将会跳过`include`和`library`目录的所有平台的相关猜测，用于在环境变量中配置正确路径的自动构建系统（比如：`Buildroot`）
+* 编译选项：`--debug`。会给`include`和`library搜索处理`打上调试标记，以转储所有的搜索路径并且输出到控制台
+
+使用举例：
+
+```Python
+$ MAX_CONCURRENCY=1 python setup.py build_ext --enable-[feature] install
+```
+或者使用pip：
+```Python
+$ pip install pillow --global-option="build_ext" --global-option="--enable-[feature]"
+```
+
+
 ### 在macOS上编译
 ### 在Windows上编辑
 ### 在FreeBSD上编译
