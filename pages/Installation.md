@@ -148,16 +148,190 @@ $ MAX_CONCURRENCY=1 python setup.py build_ext --enable-[feature] install
 $ pip install pillow --global-option="build_ext" --global-option="--enable-[feature]"
 ```
 
-
 ### 在macOS上编译
+
+Pillow的部分功能需要使用`Xcode命令行工具`进行编译，在命令行下运行`xcode-select --install`可以安装编译用到的工具。即使你已经安装了Xcode的所有功能，仍需要安装`Xcode命令行工具`，而且，在使用`命令行工具`之前需要先运行`sudo xcodebuild -license`命令来接受许可。
+
+安装依赖包最简单的方式是使用[Homebrew](https://brew.sh/)。安装Homebrew之后，运行：
+
+```Python
+$ brew install libtiff libjpeg webp little-cms2
+```
+
+在macOS上安装libraqm时可以使用Homebrew安装他的依赖项：
+
+```Python
+$ brew install freetype harfbuzz fribidi
+```
+
+然后查看`depends/install_raqm_cmake.sh`来安装libraqm。
+
+安装Pillow：
+
+```Python
+$ pip install Pillow
+```
+
+或者通过源文件安装
+
+```Python
+$ python setup.py install
+```
+
 ### 在Windows上编辑
+
+我们并不推荐通过在Windows上编译的方式安装Pillow，这是一个很曲折的过程，通常会以失败而告终。不过我们仍然在`winbuild`目录下为Windows专门提供了脚本和说明。
+
 ### 在FreeBSD上编译
+
+> 此方式只在FreeBSD10和11的版本下测试通过
+
+首先，确保你已经安装了`Python开发库`：
+
+```Python
+$ sudo pkg install python2
+```
+
+Pyhton3下则是：
+
+```Python
+$ sudo pkg install python3
+```
+
+在FreeBSD10或者11版本上需要先安装以下包：
+
+```Python 
+$ sudo pkg install jpeg-turbo tiff webp lcms2 freetype2 openjpeg harfbuzz fribidi
+```
+
+然后根据`depends/install_raqm_cmake.sh`的指示来安装libraqm
+
 ### 在Linux上编译
+
+如果你的Python不是通过编译云文件安装的，要确保你已经安装了`Python开发库`。
+
+在Debian或者Ubuntu系统下Python2.x版本通过以下命令安装`Python开发库`：
+
+```Python
+$ sudo apt-get install python-dev python-setuptools
+```
+
+Python3下则是：
+
+```Python
+$ sudo apt-get install python3-dev python3-setuptools
+```
+
+Fedora系统下Python2.x版本通过以下命令安装`Python开发库`：
+
+```Python
+$ sudo dnf install python-devel redhat-rpm-config
+```
+
+Python3下则是：
+
+```Python
+$ sudo dnf install python3-devel redhat-rpm-config
+```
+
+> Fedora 23下安装Pillow需要依赖`redhat-rpm-config`，但是23以前的版本不需要依赖此包。
+
+<b>Ubuntu 16.04 LTS<b/>需要先安装以下依赖项：
+
+```Python
+$ sudo apt-get install libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
+    libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python-tk \
+    libharfbuzz-dev libfribidi-dev
+```
+
+然后根据`depends/install_raqm.sh`的指示安装libraqm。
+
+<b>RedHat Centos<b/>或<b>Fedora<b/>需要先安装以下依赖项：
+
+```Python
+$ sudo dnf install libtiff-devel libjpeg-devel openjpeg2-devel zlib-devel \
+    freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel \
+    harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel
+```
+
+需要注意的是要根据系统的情况，包管理器需要换成`yum`或者`dnf`。
+
+同样的，也可以通过`测试基础设施仓库`[https://github.com/python-pillow/docker-images](https://github.com/python-pillow/docker-images)中的`Dockerfile`文件列表来找到其他发行版的编译步骤
+
 ### 在安卓上编译
+
+为了在Termux环境中进行编译，我们添加了对基本的Android支持，可以通过以下命令安装依赖项：
+
+```Python
+pkg -y install python python-dev ndk-sysroot clang make libjpeg-turbo-dev
+```
+
+我们已经在x86架构的ChromeOS的Termux应用上测试通过
 
 ## 平台支持性
 
+当前各个平台对Pillow的支持性。我们只对一些常见的平台打包了二进制安装包，但是源码应该是支持在下列平台和架构上编译并运行的。我们的目标是支持Linux，macOS和Windows的所有当前版本（译者2019-08-29注：这里说的‘当前版本’指的应该是比较通用的版本，如win7、win10、ubuntu 14，ubuntu 16等，而排除win xp等较久远的版本）
+
 ### 持续集成计划
+
+Pillow的每一次更改都会为以下平台编译二进制包并测试通过。
+
+
+|**Operating system**             |**Tested Python versions**    |**Tested Architecture**|
+|:-                                |:-                             |:-                     |
+| Alpine                           | 2.7, 3.7                      |x86-64                 |
+| Arch                             | 2.7, 3.7                      |x86-64                 |
+| Amazon Linux 1                   | 2.7, 3.6                      |x86-64                 |
+| Amazon Linux 2                   | 2.7, 3.6                      |x86-64                 |
+| CentOS 6                         | 2.7, 3.6                      |x86-64                 |
+| CentOS 7                         | 2.7, 3.6                      |x86-64                 |
+| Debian 9 Stretch                 | 2.7, 3.5                      |x86                    |
+| Debian 10 Buster                 | 2.7, 3.7                      |x86                    |
+| Fedora 29                        | 2.7, 3.7                      |x86-64                 |
+| Fedora 30                        | 2.7, 3.7                      |x86-64                 |
+| macOS 10.13 High Sierra*         | 2.7, 3.5, 3.6, 3.7            |x86-64                 |
+| Ubuntu Linux 16.04 LTS           | 2.7, 3.5, 3.6, 3.7,           |x86-64                 |
+|                                  | PyPy, PyPy3                   |                       |
+| Windows Server 2012 R2           | 2.7, 3.5, 3.6, 3.7<br/>PyPy, 3.7/MinGW       |x86, x86-64<br/>x86    |
+
+** Pillow并不会在为一次提交运行macOS CI，但是每一个release会
+
 ### 其他平台
 
+根据反馈，以下这些平台可用于上述版本。
+
+> 请系统维护人员在平台上测试Pillow之后更新文档并提交`Pull Request（合并请求）`
+
+
+|**Operating system**              |**Tested Python versions**    |**Latest tested Pillow version**|**Tested processors**  |
+| macOS 10.14 Mojave               | 2.7, 3.5, 3.6, 3.7           | 6.0.0                          |x86-64                 |
+|                                  | 3.4                          | 5.4.1                          |                       |
+| macOS 10.13 High Sierra          | 2.7, 3.4, 3.5, 3.6           | 4.2.1                          |x86-64                 |
+| macOS 10.12 Sierra               | 2.7, 3.4, 3.5, 3.6           | 4.1.1                          |x86-64                 |
+| Mac OS X 10.11 El Capitan        | 2.7, 3.4, 3.5, 3.6, 3.7      | 5.4.1                          |x86-64                 |
+|                                  | 3.3                          | 4.1.0                          |                       |
+| Mac OS X 10.9 Mavericks          | 2.7, 3.2, 3.3, 3.4           | 3.0.0                          |x86-64                 |
+| Mac OS X 10.8 Mountain Lion      | 2.6, 2.7, 3.2, 3.3           |                                |x86-64                 |
+| Redhat Linux 6                   | 2.6                          |                                |x86                    |
+| CentOS 6.3                       | 2.7, 3.3                     |                                |x86                    |
+| Fedora 23                        | 2.7, 3.4                     | 3.1.0                          |x86-64                 |
+| Ubuntu Linux 12.04 LTS           | 2.6, 3.2, 3.3, 3.4, 3.5      | 3.4.1                          |x86,x86-64             |
+|                                  | PyPy5.3.1, PyPy3 v2.4.0      |                                |                       |
+|                                  | 2.7                          | 4.3.0                          |x86-64                 |
+|                                  | 2.7, 3.2                     | 3.4.1                          |ppc                    |
+| Ubuntu Linux 10.04 LTS           | 2.6                          | 2.3.0                          |x86,x86-64             |
+| Debian 8.2 Jessie                | 2.7, 3.4                     | 3.1.0                          |x86-64                 |
+| Raspbian Jessie                  | 2.7, 3.4                     | 3.1.0                          |arm                    |
+| Raspbian Stretch                 | 2.7, 3.5                     | 4.0.0                          |arm                    |
+| Gentoo Linux                     | 2.7, 3.2                     | 2.1.0                          |x86-64                 |
+| FreeBSD 11.1                     | 2.7, 3.4, 3.5, 3.6           | 4.3.0                          |x86-64                 |
+| FreeBSD 10.3                     | 2.7, 3.4, 3.5                | 4.2.0                          |x86-64                 |
+| FreeBSD 10.2                     | 2.7, 3.4                     | 3.1.0                          |x86-64                 |
+| Windows 8.1 Pro                  | 2.6, 2.7, 3.2, 3.3, 3.4      | 2.4.0                          |x86,x86-64             |
+| Windows 8 Pro                    | 2.6, 2.7, 3.2, 3.3, 3.4a3    | 2.2.0                          |x86,x86-64             |
+| Windows 7 Pro                    | 2.7, 3.2, 3.3                | 3.4.1                          |x86-64                 |
+| Windows Server 2008 R2 Enterprise| 3.3                          |                                |x86-64                 |
+
 ## 旧版本
+
+你可以从[PyPI历史版本](https://pypi.org/project/Pillow/#history)中通过链接直接获取，比如：[https://pypi.org/project/Pillow/1.0/](https://pypi.org/project/Pillow/1.0/)
