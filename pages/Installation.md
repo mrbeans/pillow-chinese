@@ -150,9 +150,6 @@ $ pip install pillow --global-option="build_ext" --global-option="--enable-[feat
 
 
 ### 在macOS上编译
-
-### 编译选项
-### 在macOS上编译
 ### 在Windows上编辑
 ### 在FreeBSD上编译
 ### 在Linux上编译
