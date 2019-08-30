@@ -35,9 +35,7 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
-    <link rel="search" title="搜索" href="../search.html" />
-    <link rel="next" title="引用" href="Reference.html" />
-    <link rel="prev" title="安装" href="Installation.html" /> 
+    <link rel="search" title="搜索" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -51,7 +49,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> pillow-chinese
+            <a href="../contents.html" class="icon icon-home"> pillow-chinese
           
 
           
@@ -81,43 +79,38 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="Installation.html">安装</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">使用手册</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">预览</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">图片存档</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">图片展示</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">图片处理</a></li>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">使用手册</a><ul>
+<li><a class="reference internal" href="#id2">预览</a><ul>
+<li><a class="reference internal" href="#id3">图片存档</a></li>
+<li><a class="reference internal" href="#id4">图片展示</a></li>
+<li><a class="reference internal" href="#id5">图片处理</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">教程</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#image">使用Image类</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7">文件的读写</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#jpeg">将图片转换成JPEG格式</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id8">创建JPEG的缩略图</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id9">识别图像文件</a></li>
+<li><a class="reference internal" href="#id6">教程</a><ul>
+<li><a class="reference internal" href="#image">使用Image类</a></li>
+<li><a class="reference internal" href="#id7">图片的读写</a><ul>
+<li><a class="reference internal" href="#jpeg">将图片转换成JPEG格式</a></li>
+<li><a class="reference internal" href="#id8">创建JPEG的缩略图</a></li>
+<li><a class="reference internal" href="#id9">识别图像文件</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">剪切，粘贴，合并图片</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id11">从图片中复制子矩形</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id12">处理子矩形之后再粘贴回去</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id13">翻转图片</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id14">颜色的分割与合并</a></li>
+<li><a class="reference internal" href="#id10">剪切，粘贴，合并图片</a><ul>
+<li><a class="reference internal" href="#id11">从图片中复制子矩形</a></li>
+<li><a class="reference internal" href="#id12">处理子矩形之后再粘贴回去</a></li>
+<li><a class="reference internal" href="#id13">翻转图片</a></li>
+<li><a class="reference internal" href="#id14">颜色的分割与合并</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id15">概念</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id16">附录</a></li>
+<li><a class="reference internal" href="#id15">概念</a></li>
+<li><a class="reference internal" href="#id16">附录</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="Reference.html">引用</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Porting.html">移植</a></li>
-<li class="toctree-l1"><a class="reference internal" href="About.html">关于</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ReleaseNote.html">发行说明</a></li>
-<li class="toctree-l1"><a class="reference internal" href="DeprecationsAndRemovals.html">弃用与删除</a></li>
 </ul>
-
+</div>
             
           
         </div>
@@ -130,7 +123,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">pillow-chinese</a>
+          <a href="../contents.html">pillow-chinese</a>
         
       </nav>
 
@@ -159,7 +152,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../contents.html">Docs</a> &raquo;</li>
         
       <li>使用手册</li>
     
@@ -184,23 +177,54 @@
 <h1>使用手册<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <div class="section" id="id2">
 <h2>预览<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p><b>Python Imaging Library（PIL）</b>给你的Python解释器提供了处理图片的能力</p>
+<p>PIL提供了对多种格式的图片进行高效且非常强大的处理能力。</p>
+<p>PIL的核心库设计之初是为了快速访问常见的图片格式，所以他相对于一般的图片处理程序提供了更强大的功能</p>
+<p>我们来看看这个库的一些可能用途。</p>
 <div class="section" id="id3">
 <h3>图片存档<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
+<p>PIL一开始是为了图片存档和批处理程序使用。你可以利用PIL进行创建缩略图，转换图片格式，打印图片等操作</p>
+<p>而现在的PIl则可以标记和读取多种格式的图片，创建/修改的操作则被故意限制为只支持常用的格式。</p>
 </div>
 <div class="section" id="id4">
 <h3>图片展示<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
+<p>最新的发布版本包含了Tkinter模块的<b><code class="docutils literal notranslate"><span class="pre">PhotoImage</span></code></b>和<b><code class="docutils literal notranslate"><span class="pre">BitmapImage</span></code></b>接口，以及可以在PythonWin和其他基于Windows的工具包下可以使用的<b><code class="docutils literal notranslate"><span class="pre">Windows</span> <span class="pre">DIB</span> <span class="pre">interface</span></code></b>。</p>
+<p>为了方便调试，我们提供了<b><code class="docutils literal notranslate"><span class="pre">show()</span></code></b>方法将图片存储之后再调用其他程序将其显示出来。</p>
 </div>
 <div class="section" id="id5">
 <h3>图片处理<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
+<p>PIL提供了图片处理的基础能力，包括点操作，使用一组内置卷积内核进行过滤，以及色彩空间的转换。</p>
+<p>同时，它也支持重置图片尺寸、翻转以及任意角度的旋转</p>
+<p>有一种柱状图方法可以让你从图像中提取一些统计数据。这可以用于自动增强对比度，并用于全局统计分析。</p>
 </div>
 </div>
 <div class="section" id="id6">
 <h2>教程<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
 <div class="section" id="image">
 <h3>使用Image类<a class="headerlink" href="#image" title="永久链接至标题">¶</a></h3>
+<p>PIL中最重要的类就是<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>类，在模块中也是一样的名字。有很多种方式可以创建<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>类的实例；比如加载一张图片文件，处理其他图片或者是从0创建一张空白图片。</p>
+<p>可以使用<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>模块中的<b><code class="docutils literal notranslate"><span class="pre">open()</span></code></b>方法加载图片文件：</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">im</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;hopper.ppm&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>如果读取成功，open方法将会返回一个<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>对象，现在你可以通过实例的属性来检查文件内容：</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">format</span><span class="p">,</span><span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="n">im</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+<span class="n">PPM</span> <span class="p">(</span><span class="mi">512</span><span class="p">,</span><span class="mi">512</span><span class="p">)</span> <span class="n">RGB</span>
+</pre></div>
+</div>
+<p>属性<b><code class="docutils literal notranslate"><span class="pre">format</span></code></b>标记了文件的源格式，如果图片不是从文件中读取的，那属性就会返回<b><code class="docutils literal notranslate"><span class="pre">None</span></code></b>。<b><code class="docutils literal notranslate"><span class="pre">size</span></code></b>属性返回的是一个包含了宽高（以像素为单位）的2个元素的元组。<b><code class="docutils literal notranslate"><span class="pre">mode</span></code></b>属性定义了图像中波段的数量和名称以及像素的类型和深度，通常情况下，“L”（亮度）表示灰度图，“RGB”表示彩色图，“CMYK”表示预打印图片（印刷色彩模式）。</p>
+<p>如果图片打开失败，会抛出<b><code class="docutils literal notranslate"><span class="pre">IOError</span></code></b>异常。</p>
+<p>一旦你创建了<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>类的实例，你就可以使用PIL提供的方法来处理图片。比如，显示我们刚才加载的图片：</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">im</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<blockquote>
+<div>标准版本中的<b><code class="docutils literal notranslate"><span class="pre">show()</span></code></b>方法效率比较低，因为他要将图片临时保存并且调用应用程序来显示图片。如果你的机器上没有安装可以显示图片的程序，<b><code class="docutils literal notranslate"><span class="pre">show()</span></code></b>方法会不起作用。如果可以显示图片，那么就可以极大地提高调试和测试的效率。</div></blockquote>
+<p>以下部分<b>简要的描述</b>了此库中提供的其他功能。</p>
 </div>
 <div class="section" id="id7">
-<h3>文件的读写<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<h3>图片的读写<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
 <div class="section" id="jpeg">
 <h4>将图片转换成JPEG格式<a class="headerlink" href="#jpeg" title="永久链接至标题">¶</a></h4>
 </div>
@@ -232,6 +256,7 @@
 </div>
 <div class="section" id="id16">
 <h2>附录<a class="headerlink" href="#id16" title="永久链接至标题">¶</a></h2>
+<p><b>``</b></p>
 </div>
 </div>
 
@@ -240,15 +265,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Reference.html" class="btn btn-neutral float-right" title="引用" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="Installation.html" class="btn btn-neutral float-left" title="安装" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
