@@ -66,15 +66,125 @@ PPM (512,512) RGB
 
 ### 图片的读写
 
+PIL支持多种图片格式，如果需要从磁盘读取图片可以使用<b>`Image`</b>模块中的<b>`open()`</b>方法，你无需关注要打开的文件的格式，PIL会根据文件内容自动识别。
+
+保存图片可以使用<b>`Image`</b>模块中的<b>`save()`</b>方法，对于保存操作来说，文件名字是很重要的。如果你不指定要保存的文件格式，PIL会根据文件名字的后缀自动的将图片转换成对应的格式。
+
 #### 将图片转换成JPEG格式
+
+```Python
+import os, sys
+from PIL import Image
+
+for infile in sys.argv[1:]:
+    f, e = os.path.splitext(infile)
+    outfile = f + ".jpg"
+    if infile != outfile:
+        try:
+            Image.open(infile).save(outfile)
+        except IOError:
+            print("cannot convert", infile)
+```
+
+<b>`save`</b>方法的第二个参数告诉PIL文件要保存的格式，如果文件名没有后缀，就必须要指明文件的格式（译者注：第二个参数以字符串的形式提供文件格式即可，不区分大小写，因为save方法内部会统一调用upper方法将其转成大写，如：“PPM”，“PNG”，“JPEG”）：
+
+```Python
+import os, sys
+from PIL import Image
+
+for infile in sys.argv[1:]:
+    f, e = os.path.splitext(infile)
+    outfile = f
+    if infile != outfile:
+        try:
+            Image.open(infile).save(f,"PNG")
+        except IOError:
+            print("cannot convert", infile)
+```
+
 #### 创建JPEG的缩略图
-#### 识别图像文件
+
+```Python
+import os, sys
+from PIL import Image
+
+size = (128, 128)
+
+for infile in sys.argv[1:]:
+    outfile = os.path.splitext(infile)[0] + ".thumbnail"
+    if infile != outfile:
+        try:
+            im = Image.open(infile)
+            im.thumbnail(size)
+            im.save(outfile, "JPEG")
+        except IOError:
+            print("cannot create thumbnail for", infile)
+```
+
+需要说明的是，除非真的需要，否则PIL不会解码或者加载[栅格数据](https://baike.baidu.com/item/%E6%A0%85%E6%A0%BC%E6%95%B0%E6%8D%AE/5261386)，当你打开文件的时候，PIL就会从文件头中读取文件格式、类型、尺寸等其他解码需要的属性，但是文件的其余部分知道你需要处理的时候才会被加载。
+
+这也是为什么PIL读取图片文件很快，因为他不受文件大小和压缩类型影响。
+
+#### 标识图像文件
+
+```Python
+import sys
+from PIL import Image
+
+for infile in sys.argv[1:]:
+    try:
+        with Image.open(infile) as im:
+            print(infile, im.format, "%dx%d" % im.size, im.mode)
+    except IOError:
+        pass
+```
 
 ### 剪切，粘贴，合并图片
 
-#### 从图片中复制子矩形
-#### 处理子矩形之后再粘贴回去
+<b>`Image`</b>类提供了区域选择的方法，使用<b>`crop()`</b>方法可以从图片中截取一个子矩形
+
+##### 从图片中复制一个子矩形
+
+```python
+box=(100,100,400,400)
+region=im.crop(box)
+```
+
+通过一个长度为4的元组定义你要截取的区域，他们的意义分别是（左，上，右，下）。PIL把图片的左上角作为坐标系的原点(0,0)。另外请注意，坐标指的是像素之间的位置，所以上图截取的是一个尺寸为300x300的正方形区域。
+
+现在可以以某种方式处理截取的区域并粘贴回去。
+
+#### 对子矩形做处理之后再粘贴回去
+
+```Python
+region=region.transpose(Image.ROTATE_180)
+im.paste(regin,box)
+```
+
+当把选区粘贴回去的时候，选区的尺寸必须和给定区域完全匹配。此外，该区域也不能超出图像。然而，原始图片和选区的图片格式却不必完全一致。如果不一致，在选区被粘贴回去之前会被自动的转换成和原始图片一致的格式。(更多详细信息可以参阅[颜色变换](https://pillow.readthedocs.io/en/latest/handbook/tutorial.html#color-transforms)的部分)。`译者注：比如从图片A中截取了区域B，粘贴到图片C上，上述的‘原始图片’指的就是C，选区指的是B`
+
+这里有另外一个例子：
+
 #### 翻转图片
+
+```Python
+def roll(image, delta):
+    """Roll an image sideways."""
+    xsize, ysize = image.size
+
+    delta = delta % xsize
+    if delta == 0: return image
+
+    part1 = image.crop((0, 0, delta, ysize))
+    part2 = image.crop((delta, 0, xsize, ysize))
+    image.paste(part1, (xsize-delta, 0, xsize, ysize))
+    image.paste(part2, (0, 0, xsize-delta, ysize))
+
+    return image
+```
+
+更高级的技巧，`paste`方法有一个可选参数用于处理粘贴图片的透明度，255表示粘贴的选区完全不透明（即把选区不做任何透明度的处理粘贴上去），而0则表示粘贴的图片是完全透明的（看起来和没有粘贴一样），0-255中间值表示了不同的透明度。比如：粘贴RGBA图像并将其用作遮罩将粘贴图像的不透明部分，但不粘贴其透明背景
+
 #### 颜色的分割与合并
 
 ## 概念
