@@ -1,6 +1,6 @@
-# 使用手册
+## 使用手册
 
-## 预览
+### 预览
 
 <b>Python Imaging Library（PIL）</b>给你的Python解释器提供了处理图片的能力
 
@@ -10,19 +10,19 @@ PIL的核心库设计之初是为了快速访问常见的图片格式，所以�
 
 我们来看看这个库的一些可能用途。
 
-### 图片存档
+#### 图片存档
 
 PIL一开始是为了图片存档和批处理程序使用。你可以利用PIL进行创建缩略图，转换图片格式，打印图片等操作
 
 而现在的PIl则可以标记和读取多种格式的图片，创建/修改的操作则被故意限制为只支持常用的格式。
 
-### 图片展示
+#### 图片展示
 
 最新的发布版本包含了Tkinter模块的<b>`PhotoImage`</b>和<b>`BitmapImage`</b>接口，以及可以在PythonWin和其他基于Windows的工具包下可以使用的<b>`Windows DIB interface`</b>。
 
 为了方便调试，我们提供了<b>`show()`</b>方法将图片存储之后再调用其他程序将其显示出来。
 
-### 图片处理
+#### 图片处理
 
 PIL提供了图片处理的基础能力，包括点操作，使用一组内置卷积内核进行过滤，以及色彩空间的转换。
 
@@ -30,9 +30,9 @@ PIL提供了图片处理的基础能力，包括点操作，使用一组内置�
 
 有一种柱状图方法可以让你从图像中提取一些统计数据。这可以用于自动增强对比度，并用于全局统计分析。
 
-## 教程
+### 教程
 
-### 使用Image类
+#### 使用Image类
 
 PIL中最重要的类就是<b>`Image`</b>类，在模块中也是一样的名字。有很多种方式可以创建<b>`Image`</b>类的实例；比如加载一张图片文件，处理其他图片或者是从0创建一张空白图片。
 
@@ -64,13 +64,13 @@ PPM (512,512) RGB
 
 以下部分<b>简要的描述</b>了此库中提供的其他功能。
 
-### 图片的读写
+#### 图片的读写
 
 PIL支持多种图片格式，如果需要从磁盘读取图片可以使用<b>`Image`</b>模块中的<b>`open()`</b>方法，你无需关注要打开的文件的格式，PIL会根据文件内容自动识别。
 
 保存图片可以使用<b>`Image`</b>模块中的<b>`save()`</b>方法，对于保存操作来说，文件名字是很重要的。如果你不指定要保存的文件格式，PIL会根据文件名字的后缀自动的将图片转换成对应的格式。
 
-#### 将图片转换成JPEG格式
+##### 将图片转换成JPEG格式
 
 ```Python
 import os, sys
@@ -102,7 +102,7 @@ for infile in sys.argv[1:]:
             print("cannot convert", infile)
 ```
 
-#### 创建JPEG的缩略图
+##### 创建JPEG的缩略图
 
 ```Python
 import os, sys
@@ -125,7 +125,7 @@ for infile in sys.argv[1:]:
 
 这也是为什么PIL读取图片文件很快，因为他不受文件大小和压缩类型影响。
 
-#### 标识图像文件
+##### 标识图像文件
 
 ```Python
 import sys
@@ -139,11 +139,11 @@ for infile in sys.argv[1:]:
         pass
 ```
 
-### 剪切，粘贴，合并图片
+#### 剪切，粘贴，合并图片
 
 <b>`Image`</b>类提供了区域选择的方法，使用<b>`crop()`</b>方法可以从图片中截取一个子矩形
 
-##### 从图片中复制一个子矩形
+###### 从图片中复制一个子矩形
 
 ```python
 box=(100,100,400,400)
@@ -154,7 +154,7 @@ region=im.crop(box)
 
 现在可以以某种方式处理截取的区域并粘贴回去。
 
-#### 对子矩形做处理之后再粘贴回去
+##### 对子矩形做处理之后再粘贴回去
 
 ```Python
 region=region.transpose(Image.ROTATE_180)
@@ -165,7 +165,7 @@ im.paste(regin,box)
 
 这里有另外一个例子：
 
-#### 翻转图片
+##### 翻转图片
 
 ```Python
 def roll(image, delta):
@@ -183,11 +183,94 @@ def roll(image, delta):
     return image
 ```
 
-更高级的技巧，`paste`方法有一个可选参数用于处理粘贴图片的透明度，255表示粘贴的选区完全不透明（即把选区不做任何透明度的处理粘贴上去），而0则表示粘贴的图片是完全透明的（看起来和没有粘贴一样），0-255中间值表示了不同的透明度。比如：粘贴RGBA图像并将其用作遮罩将粘贴图像的不透明部分，但不粘贴其透明背景
+更高级的技巧，`paste`方法有一个可选参数用于处理粘贴图片的透明度，255表示粘贴的选区完全不透明（即把选区不做任何透明度的处理粘贴上去），而0则表示粘贴的图片是完全透明的（看起来和没有粘贴一样），0-255中间值表示了不同的透明度。比如：pasting an RGBA image and also using it as the mask would paste the opaque portion of the image but not its transparent background.
 
-#### 颜色的分割与合并
+PIL也可以处理[多波段图片](https://baike.baidu.com/item/%E5%A4%9A%E6%B3%A2%E6%AE%B5%E5%9B%BE%E5%83%8F/5010698?fr=aladdin)中的单个波段，比如RGB图片。<b>`split`</b>方法用于创建一组新图像，每个图像包含来自原始图像的一个波段。<b>`merge`</b>方法接收图像的模式和一个波段元组，并将它们组合成新图像，以下示例说明了如何交换RGB图像的三个波段：
 
-## 概念
+##### 颜色的分割与合并
 
-## 附录
+```Python
+r,g,b=im.split()
+im=Image.merge('RGB',(b,g,r))
+```
+
+需要说明的是，对于`单波段`的图片，<b>`split()`</b>返回的是图片本身。如果需要单独处理图像的各个波段，需要先把图片转换成“RGB”模式。
+
+##### 几何变换
+
+<b>`PIL.Image.Image`</b>类提供了<b>`resize()`</b>和<b>`rotate()`</b>方法来缩放和旋转图片。前者接收一个元组来设置新的尺寸，后者采用逆时针方向旋转的角度。
+
+###### 简单的几何变换
+
+```Python
+out = im.resize((128, 128))
+out = im.rotate(45) #逆时针旋转的角度
+```
+
+如果需要将图片旋转90度，除了<b>`rotate()`</b>之外可以使用<b>`transpose()`</b>方法。后者也可将图片按照其水平轴或垂直轴翻转图像。
+
+###### 翻转图片
+
+请注意描述中的“翻转”和“旋转”，“翻转”180度指的是像通过镜子查看的效果
+
+```Python
+out = im.transpose(Image.FLIP_LEFT_RIGHT)#左右翻转180度
+out = im.transpose(Image.FLIP_TOP_BOTTOM)#上下翻转180度
+out = im.transpose(Image.ROTATE_90)#逆时针旋转90度
+out = im.transpose(Image.ROTATE_180)#逆时针旋转180度
+out = im.transpose(Image.ROTATE_270)#逆时针旋转270度
+```
+
+由上面的例子可以看出，`transpose(ROTATE)`操作可以达到和<b>`rotate()`</b>一样的操作效果，如果`展开标志(expand flag)`为true，则为图像的大小提供相同的更改
+
+对图片进行变换更常用的办法是使用<b>`transform()`</b>。
+
+##### 颜色变换
+
+PIL提供了<b>`convert()`</b>方法把图片转换成不同的颜色通道。
+
+###### 在模式之间转换
+
+```Python
+from PIL import Image
+im = Image.open("hopper.ppm").convert("L")#转成黑白图片
+im.show()
+```
+
+PIL提供了在各个支持的模式之间的转换，比如“L”和“RGB”互相转换。如果需要转换其他模式，就必须要使用中间图像进行转换（通常是“RGB”图像）（译者注：需要将不支持的模式转换成RGB，再转换成期望的格式，如：模式A需要转换到模式B，由于不能直接转换，所以需要先把模式A转换成RGB格式，再将RGB转换成需要的模式B）。
+
+##### 图像增强
+
+PIL提供了一些方法和模块用来改善图像。
+
+###### 应用过滤器
+
+```Python
+from PIL import Image,ImageFilter
+
+im = Image.open("images/hopper.ppm")
+im = im.filter(ImageFilter.DETAIL)
+im.show()
+```
+
+###### 点操作
+
+<b>`point()`</b>方法可以用于转换图像的像素值（比如：调整图像对比度）。大多数情况下，此方法接收的参数是一个`函数对象（function object）`。根据该`函数`处理每个像素：
+
+###### 应用点变换
+
+```Python
+# 每个像素点*2
+im = im.point(lambda i: i * 2)
+```
+
+使用上面的技巧，可以快速的对图片应用任何简单的表达式操作。还可以同时使用`point()`和`paste()`方法有选择地修改图像：
+
+###### 处理个别波段
+
+
+
+### 概念
+
+### 附录
 <b>``</b>

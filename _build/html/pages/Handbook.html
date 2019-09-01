@@ -93,20 +93,36 @@
 <li><a class="reference internal" href="#id7">图片的读写</a><ul>
 <li><a class="reference internal" href="#jpeg">将图片转换成JPEG格式</a></li>
 <li><a class="reference internal" href="#id8">创建JPEG的缩略图</a></li>
-<li><a class="reference internal" href="#id9">识别图像文件</a></li>
+<li><a class="reference internal" href="#id9">标识图像文件</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#id10">剪切，粘贴，合并图片</a><ul>
-<li><a class="reference internal" href="#id11">从图片中复制子矩形</a></li>
-<li><a class="reference internal" href="#id12">处理子矩形之后再粘贴回去</a></li>
+<li><a class="reference internal" href="#id11">从图片中复制一个子矩形</a></li>
+<li><a class="reference internal" href="#id12">对子矩形做处理之后再粘贴回去</a></li>
 <li><a class="reference internal" href="#id13">翻转图片</a></li>
 <li><a class="reference internal" href="#id14">颜色的分割与合并</a></li>
+<li><a class="reference internal" href="#id15">几何变换</a><ul>
+<li><a class="reference internal" href="#id16">简单的几何变换</a></li>
+<li><a class="reference internal" href="#id17">翻转图片</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id18">颜色变换</a><ul>
+<li><a class="reference internal" href="#id19">在模式之间转换</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id20">图像增强</a><ul>
+<li><a class="reference internal" href="#id21">应用过滤器</a></li>
+<li><a class="reference internal" href="#id22">点操作</a></li>
+<li><a class="reference internal" href="#id23">应用点变换</a></li>
+<li><a class="reference internal" href="#id24">处理个别波段</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id15">概念</a></li>
-<li><a class="reference internal" href="#id16">附录</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id25">概念</a></li>
+<li><a class="reference internal" href="#id26">附录</a></li>
 </ul>
 </li>
 </ul>
@@ -225,37 +241,197 @@
 </div>
 <div class="section" id="id7">
 <h3>图片的读写<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h3>
+<p>PIL支持多种图片格式，如果需要从磁盘读取图片可以使用<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>模块中的<b><code class="docutils literal notranslate"><span class="pre">open()</span></code></b>方法，你无需关注要打开的文件的格式，PIL会根据文件内容自动识别。</p>
+<p>保存图片可以使用<b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>模块中的<b><code class="docutils literal notranslate"><span class="pre">save()</span></code></b>方法，对于保存操作来说，文件名字是很重要的。如果你不指定要保存的文件格式，PIL会根据文件名字的后缀自动的将图片转换成对应的格式。</p>
 <div class="section" id="jpeg">
 <h4>将图片转换成JPEG格式<a class="headerlink" href="#jpeg" title="永久链接至标题">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+    <span class="n">outfile</span> <span class="o">=</span> <span class="n">f</span> <span class="o">+</span> <span class="s2">&quot;.jpg&quot;</span>
+    <span class="k">if</span> <span class="n">infile</span> <span class="o">!=</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;cannot convert&quot;</span><span class="p">,</span> <span class="n">infile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><b><code class="docutils literal notranslate"><span class="pre">save</span></code></b>方法的第二个参数告诉PIL文件要保存的格式，如果文件名没有后缀，就必须要指明文件的格式（译者注：第二个参数以字符串的形式提供文件格式即可，不区分大小写，因为save方法内部会统一调用upper方法将其转成大写，如：“PPM”，“PNG”，“JPEG”）：</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">f</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+    <span class="n">outfile</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="k">if</span> <span class="n">infile</span> <span class="o">!=</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="s2">&quot;PNG&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;cannot convert&quot;</span><span class="p">,</span> <span class="n">infile</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="id8">
 <h4>创建JPEG的缩略图<a class="headerlink" href="#id8" title="永久链接至标题">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">infile</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.thumbnail&quot;</span>
+    <span class="k">if</span> <span class="n">infile</span> <span class="o">!=</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+            <span class="n">im</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">im</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;cannot create thumbnail for&quot;</span><span class="p">,</span> <span class="n">infile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>需要说明的是，除非真的需要，否则PIL不会解码或者加载<a class="reference external" href="https://baike.baidu.com/item/%E6%A0%85%E6%A0%BC%E6%95%B0%E6%8D%AE/5261386">栅格数据</a>，当你打开文件的时候，PIL就会从文件头中读取文件格式、类型、尺寸等其他解码需要的属性，但是文件的其余部分知道你需要处理的时候才会被加载。</p>
+<p>这也是为什么PIL读取图片文件很快，因为他不受文件大小和压缩类型影响。</p>
 </div>
 <div class="section" id="id9">
-<h4>识别图像文件<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h4>
+<h4>标识图像文件<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span> <span class="k">as</span> <span class="n">im</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">x</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">im</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="id10">
 <h3>剪切，粘贴，合并图片<a class="headerlink" href="#id10" title="永久链接至标题">¶</a></h3>
+<p><b><code class="docutils literal notranslate"><span class="pre">Image</span></code></b>类提供了区域选择的方法，使用<b><code class="docutils literal notranslate"><span class="pre">crop()</span></code></b>方法可以从图片中截取一个子矩形</p>
 <div class="section" id="id11">
-<h4>从图片中复制子矩形<a class="headerlink" href="#id11" title="永久链接至标题">¶</a></h4>
+<h4>从图片中复制一个子矩形<a class="headerlink" href="#id11" title="永久链接至标题">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">box</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">400</span><span class="p">,</span><span class="mi">400</span><span class="p">)</span>
+<span class="n">region</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>通过一个长度为4的元组定义你要截取的区域，他们的意义分别是（左，上，右，下）。PIL把图片的左上角作为坐标系的原点(0,0)。另外请注意，坐标指的是像素之间的位置，所以上图截取的是一个尺寸为300x300的正方形区域。</p>
+<p>现在可以以某种方式处理截取的区域并粘贴回去。</p>
 </div>
 <div class="section" id="id12">
-<h4>处理子矩形之后再粘贴回去<a class="headerlink" href="#id12" title="永久链接至标题">¶</a></h4>
+<h4>对子矩形做处理之后再粘贴回去<a class="headerlink" href="#id12" title="永久链接至标题">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">ROTATE_180</span><span class="p">)</span>
+<span class="n">im</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">regin</span><span class="p">,</span><span class="n">box</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>当把选区粘贴回去的时候，选区的尺寸必须和给定区域完全匹配。此外，该区域也不能超出图像。然而，原始图片和选区的图片格式却不必完全一致。如果不一致，在选区被粘贴回去之前会被自动的转换成和原始图片一致的格式。(更多详细信息可以参阅<a class="reference external" href="https://pillow.readthedocs.io/en/latest/handbook/tutorial.html#color-transforms">颜色变换</a>的部分)。<code class="docutils literal notranslate"><span class="pre">译者注：比如从图片A中截取了区域B，粘贴到图片C上，上述的‘原始图片’指的就是C，选区指的是B</span></code></p>
+<p>这里有另外一个例子：</p>
 </div>
 <div class="section" id="id13">
 <h4>翻转图片<a class="headerlink" href="#id13" title="永久链接至标题">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">roll</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Roll an image sideways.&quot;&quot;&quot;</span>
+    <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">%</span> <span class="n">xsize</span>
+    <span class="k">if</span> <span class="n">delta</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">image</span>
+
+    <span class="n">part1</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">ysize</span><span class="p">))</span>
+    <span class="n">part2</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="n">delta</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">))</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">part1</span><span class="p">,</span> <span class="p">(</span><span class="n">xsize</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">))</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">part2</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">xsize</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="n">ysize</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">image</span>
+</pre></div>
+</div>
+<p>更高级的技巧，<code class="docutils literal notranslate"><span class="pre">paste</span></code>方法有一个可选参数用于处理粘贴图片的透明度，255表示粘贴的选区完全不透明（即把选区不做任何透明度的处理粘贴上去），而0则表示粘贴的图片是完全透明的（看起来和没有粘贴一样），0-255中间值表示了不同的透明度。比如：pasting an RGBA image and also using it as the mask would paste the opaque portion of the image but not its transparent background.</p>
+<p>PIL也可以处理<a class="reference external" href="https://baike.baidu.com/item/%E5%A4%9A%E6%B3%A2%E6%AE%B5%E5%9B%BE%E5%83%8F/5010698?fr=aladdin">多波段图片</a>中的单个波段，比如RGB图片。<b><code class="docutils literal notranslate"><span class="pre">split</span></code></b>方法用于创建一组新图像，每个图像包含来自原始图像的一个波段。<b><code class="docutils literal notranslate"><span class="pre">merge</span></code></b>方法接收图像的模式和一个波段元组，并将它们组合成新图像，以下示例说明了如何交换RGB图像的三个波段：</p>
 </div>
 <div class="section" id="id14">
 <h4>颜色的分割与合并<a class="headerlink" href="#id14" title="永久链接至标题">¶</a></h4>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">r</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">im</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="n">im</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,(</span><span class="n">b</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">r</span><span class="p">))</span>
+</pre></div>
 </div>
-</div>
+<p>需要说明的是，对于<code class="docutils literal notranslate"><span class="pre">单波段</span></code>的图片，<b><code class="docutils literal notranslate"><span class="pre">split()</span></code></b>返回的是图片本身。如果需要单独处理图像的各个波段，需要先把图片转换成“RGB”模式。</p>
 </div>
 <div class="section" id="id15">
-<h2>概念<a class="headerlink" href="#id15" title="永久链接至标题">¶</a></h2>
-</div>
+<h4>几何变换<a class="headerlink" href="#id15" title="永久链接至标题">¶</a></h4>
+<p><b><code class="docutils literal notranslate"><span class="pre">PIL.Image.Image</span></code></b>类提供了<b><code class="docutils literal notranslate"><span class="pre">resize()</span></code></b>和<b><code class="docutils literal notranslate"><span class="pre">rotate()</span></code></b>方法来缩放和旋转图片。前者接收一个元组来设置新的尺寸，后者采用逆时针方向旋转的角度。</p>
 <div class="section" id="id16">
-<h2>附录<a class="headerlink" href="#id16" title="永久链接至标题">¶</a></h2>
+<h5>简单的几何变换<a class="headerlink" href="#id16" title="永久链接至标题">¶</a></h5>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">))</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span> <span class="c1">#逆时针旋转的角度</span>
+</pre></div>
+</div>
+<p>如果需要将图片旋转90度，除了<b><code class="docutils literal notranslate"><span class="pre">rotate()</span></code></b>之外可以使用<b><code class="docutils literal notranslate"><span class="pre">transpose()</span></code></b>方法。后者也可将图片按照其水平轴或垂直轴翻转图像。</p>
+</div>
+<div class="section" id="id17">
+<h5>翻转图片<a class="headerlink" href="#id17" title="永久链接至标题">¶</a></h5>
+<p>请注意描述中的“翻转”和“旋转”，“翻转”180度指的是像通过镜子查看的效果</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">FLIP_LEFT_RIGHT</span><span class="p">)</span><span class="c1">#左右翻转180度</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">FLIP_TOP_BOTTOM</span><span class="p">)</span><span class="c1">#上下翻转180度</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">ROTATE_90</span><span class="p">)</span><span class="c1">#逆时针旋转90度</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">ROTATE_180</span><span class="p">)</span><span class="c1">#逆时针旋转180度</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">ROTATE_270</span><span class="p">)</span><span class="c1">#逆时针旋转270度</span>
+</pre></div>
+</div>
+<p>由上面的例子可以看出，<code class="docutils literal notranslate"><span class="pre">transpose(ROTATE)</span></code>操作可以达到和<b><code class="docutils literal notranslate"><span class="pre">rotate()</span></code></b>一样的操作效果，如果<code class="docutils literal notranslate"><span class="pre">展开标志(expand</span> <span class="pre">flag)</span></code>为true，则为图像的大小提供相同的更改</p>
+<p>对图片进行变换更常用的办法是使用<b><code class="docutils literal notranslate"><span class="pre">transform()</span></code></b>。</p>
+</div>
+</div>
+<div class="section" id="id18">
+<h4>颜色变换<a class="headerlink" href="#id18" title="永久链接至标题">¶</a></h4>
+<p>PIL提供了<b><code class="docutils literal notranslate"><span class="pre">convert()</span></code></b>方法把图片转换成不同的颜色通道。</p>
+<div class="section" id="id19">
+<h5>在模式之间转换<a class="headerlink" href="#id19" title="永久链接至标题">¶</a></h5>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;hopper.ppm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span><span class="c1">#转成黑白图片</span>
+<span class="n">im</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>PIL提供了在各个支持的模式之间的转换，比如“L”和“RGB”互相转换。如果需要转换其他模式，就必须要使用中间图像进行转换（通常是“RGB”图像）（译者注：需要将不支持的模式转换成RGB，再转换成期望的格式，如：模式A需要转换到模式B，由于不能直接转换，所以需要先把模式A转换成RGB格式，再将RGB转换成需要的模式B）。</p>
+</div>
+</div>
+<div class="section" id="id20">
+<h4>图像增强<a class="headerlink" href="#id20" title="永久链接至标题">¶</a></h4>
+<p>PIL提供了一些方法和模块用来改善图像。</p>
+<div class="section" id="id21">
+<h5>应用过滤器<a class="headerlink" href="#id21" title="永久链接至标题">¶</a></h5>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span><span class="n">ImageFilter</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;images/hopper.ppm&quot;</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ImageFilter</span><span class="o">.</span><span class="n">DETAIL</span><span class="p">)</span>
+<span class="n">im</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id22">
+<h5>点操作<a class="headerlink" href="#id22" title="永久链接至标题">¶</a></h5>
+<p><b><code class="docutils literal notranslate"><span class="pre">point()</span></code></b>方法可以用于转换图像的像素值（比如：调整图像对比度）。大多数情况下，此方法接收的参数是一个<code class="docutils literal notranslate"><span class="pre">函数对象（function</span> <span class="pre">object）</span></code>。根据该<code class="docutils literal notranslate"><span class="pre">函数</span></code>处理每个像素：</p>
+</div>
+<div class="section" id="id23">
+<h5>应用点变换<a class="headerlink" href="#id23" title="永久链接至标题">¶</a></h5>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 每个像素点*2</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="o">.</span><span class="n">point</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>使用上面的技巧，可以快速的对图片应用任何简单的表达式操作。还可以同时使用<code class="docutils literal notranslate"><span class="pre">point()</span></code>和<code class="docutils literal notranslate"><span class="pre">paste()</span></code>方法有选择地修改图像：</p>
+</div>
+<div class="section" id="id24">
+<h5>处理个别波段<a class="headerlink" href="#id24" title="永久链接至标题">¶</a></h5>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="id25">
+<h2>概念<a class="headerlink" href="#id25" title="永久链接至标题">¶</a></h2>
+</div>
+<div class="section" id="id26">
+<h2>附录<a class="headerlink" href="#id26" title="永久链接至标题">¶</a></h2>
 <p><b>``</b></p>
 </div>
 </div>
